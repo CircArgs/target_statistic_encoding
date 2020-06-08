@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "target_statistic_encoding"
+version = "0.1.0"
+description = "A lightweight library for encoding categorical features in your dataset with robust k-fold target statistics in training."
+authors = ["CircArgs <quebecname@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.6.1"
+pandas = "^0.23.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+pytest-cov = "^2.4"
+black = {version = "^19.10b0", allow-prereleases = true}
+pylint = "^2.5.2"
+dephell = "^0.8.3"
+
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "setuppy", path = "setup.py"}
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
