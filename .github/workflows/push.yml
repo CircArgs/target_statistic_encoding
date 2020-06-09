@@ -1,0 +1,22 @@
+name: test
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Run Pytest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out code...
+        id: checkout
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - name: testing
+        id: testing
+        uses: ./.github/actions/testing
+        # env:
+        #   GITPASS: ${{ secrets.GITPASS }}
+        #   EMAIL: ${{ secrets.EMAIL }}
