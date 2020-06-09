@@ -7,7 +7,12 @@
 
 ---
 
+# Install
+### from pypi
+`pip install target_statistic_encoding`
 
+### from source
+`python -m pip install git+https://github.com/CircArgs/target_statistic_encoding.git`
 
 # What?
 
