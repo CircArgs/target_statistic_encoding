@@ -25,7 +25,7 @@ quantile = 0.5
         stat_funcs.Quantile,
     ],
 )
-def test_stat_funcs(stat_func):
+def test_fit_transform_transform_with_stat_funcs(stat_func):
     func_name = stat_func.__name__
     if func_name == "Quantile":
         stat_func = stat_func(quantile)
@@ -44,3 +44,21 @@ def test_stat_funcs(stat_func):
     assert np.isclose(
         train_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, train[["X1_Cat2Num", "X2_Cat2Num"]].values
     ).all(), "Train data did not match for {}".format(func_name)
+
+def test_fit_and_transform():
+    import warnings
+    
+    func_name="Mean"
+    cat2num = Cat2Num(["X1", "X2"], "target")
+    train = data[data.split == "train"]
+    test = data[data.split == "test"]
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        cat2num.fit(train, credibility=credibility)
+        test = cat2num.transform(test)
+    test_data_gt = pd.read_csv(data_dir("test_data_test_fit_only.csv"))
+    assert np.isclose(
+        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, test[["X1_Cat2Num", "X2_Cat2Num"]].values
+    ).all(), "Test data did not match"
+
+
