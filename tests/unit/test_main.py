@@ -61,4 +61,20 @@ def test_fit_and_transform():
         test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, test[["X1_Cat2Num", "X2_Cat2Num"]].values
     ).all(), "Test data did not match"
 
+def test_fit_then_transform_inplace():
+    import warnings
+    
+    func_name="Mean"
+    cat2num = Cat2Num(["X1", "X2"], "target")
+    train = data[data.split == "train"]
+    test = data[data.split == "test"]
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        cat2num.fit(train, credibility=credibility)
+        cat2num.transform(test, inplace = True)
+    test_data_gt = pd.read_csv(data_dir("test_data_test_fit_only.csv"))
+    assert np.isclose(
+        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, test[["X1_Cat2Num", "X2_Cat2Num"]].values
+    ).all(), "Test data did not match"
+
 
