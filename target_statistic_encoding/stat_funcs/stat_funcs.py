@@ -3,39 +3,32 @@ from typing import Callable, Union
 from typing_extensions import Protocol
 
 
-def mean():
-    def stat_func(df: pd.DataFrame):
+class Mean:
+    def __call__(self, df: pd.DataFrame):
         return df.mean()
 
-    return stat_func
 
-
-def median():
-    def stat_func(df: pd.DataFrame):
+class Median:
+    def __call__(self, df: pd.DataFrame):
         return df.median()
 
-    return stat_func
 
-
-def std():
-    def stat_func(df: pd.DataFrame):
+class Std:
+    def __call__(self, df: pd.DataFrame):
         return df.std()
 
-    return stat_func
 
-
-def var():
-    def stat_func(df: pd.DataFrame):
+class Var:
+    def __call__(self, df: pd.DataFrame):
         return df.var()
 
-    return stat_func
 
+class Quantile:
+    def __init__(self, quantile=0.5):
+        self.quantile = quantile
 
-def quantile(quantile=0.5):
-    def stat_func(df: pd.DataFrame):
-        return df.quantile(quantile)
-
-    return stat_func
+    def __call__(self, df: pd.DataFrame):
+        return df.quantile(self.quantile)
 
 
 class _StatFunc(Protocol):

@@ -32,7 +32,7 @@ class Cat2Num:
         self,
         cat_vars: List[str],
         target_var: str,
-        stat_func: stat_funcs._StatFunc = stat_funcs.mean(),
+        stat_func: stat_funcs._StatFunc = stat_funcs.Mean(),
     ):
         """
         Args:
@@ -121,7 +121,7 @@ class Cat2Num:
         return self.__cred_per
 
     def __str__(self):
-        return f"""{'Fit' if self.__fit and self.__maps else 'Unfit'}: Cat2Num(cat_vars = {self.cat_vars}, target_var = {self.target_var})"""
+        return f"""{'Fit' if (self.__fit or self.__fit_transform) and self.__maps else 'Unfit'}: Cat2Num(cat_vars = {self.cat_vars}, target_var = {self.target_var}, stat_func = {self.stat_func})"""
 
     def __repr__(self):
         return self.__str__()
