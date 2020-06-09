@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-
 echo "Installing poetry"
-pip3 install poetry;
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
 echo "Poetry install"
 poetry install
 echo "Running pytest"
