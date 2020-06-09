@@ -20,4 +20,7 @@ Even within this simple technique there is variation in implementations. Some im
 # How?
 
 This is just a simple utility library that performs the following sample operation:
+[See this example notebook](examples/example.ipynb)
+![example usage](assets/example.png)
+
 
