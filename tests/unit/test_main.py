@@ -39,16 +39,19 @@ def test_fit_transform_transform_with_stat_funcs(stat_func):
     test_data_gt = pd.read_csv(data_dir("test_data_test_{}.csv".format(func_name)))
     train_data_gt = pd.read_csv(data_dir("test_data_train_{}.csv".format(func_name)))
     assert np.isclose(
-        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, test[["X1_Cat2Num", "X2_Cat2Num"]].values
+        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values,
+        test[["X1_Cat2Num", "X2_Cat2Num"]].values,
     ).all(), "Test data did not match for {}".format(func_name)
     assert np.isclose(
-        train_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, train[["X1_Cat2Num", "X2_Cat2Num"]].values
+        train_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values,
+        train[["X1_Cat2Num", "X2_Cat2Num"]].values,
     ).all(), "Train data did not match for {}".format(func_name)
+
 
 def test_fit_and_transform():
     import warnings
-    
-    func_name="Mean"
+
+    func_name = "Mean"
     cat2num = Cat2Num(["X1", "X2"], "target")
     train = data[data.split == "train"]
     test = data[data.split == "test"]
@@ -58,23 +61,24 @@ def test_fit_and_transform():
         test = cat2num.transform(test)
     test_data_gt = pd.read_csv(data_dir("test_data_test_fit_only.csv"))
     assert np.isclose(
-        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, test[["X1_Cat2Num", "X2_Cat2Num"]].values
+        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values,
+        test[["X1_Cat2Num", "X2_Cat2Num"]].values,
     ).all(), "Test data did not match"
+
 
 def test_fit_then_transform_inplace():
     import warnings
-    
-    func_name="Mean"
+
+    func_name = "Mean"
     cat2num = Cat2Num(["X1", "X2"], "target")
     train = data[data.split == "train"]
     test = data[data.split == "test"]
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         cat2num.fit(train, credibility=credibility)
-        cat2num.transform(test, inplace = True)
+        cat2num.transform(test, inplace=True)
     test_data_gt = pd.read_csv(data_dir("test_data_test_fit_only.csv"))
     assert np.isclose(
-        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, test[["X1_Cat2Num", "X2_Cat2Num"]].values
+        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values,
+        test[["X1_Cat2Num", "X2_Cat2Num"]].values,
     ).all(), "Test data did not match"
-
-
