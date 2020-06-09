@@ -22,6 +22,13 @@ There are many means to convert categorical features to numeric ones from one-ho
 
 Even within this simple technique there is variation in implementations. Some implement a time-mimicking approach such as Catboost to gain robustness over target leakage. However, one issue with this approach is that while it introduces some variation to the encoding, for a some samples the statistic is possibly excessively biased. This small package takes a different approach for this reason. Instead, it uses stratified folds of the training set and aggregates target statistics on each fold independently.
 
+# Benefits of this implementation
+
+- stratified split target statistic helps prevent target leakage thus making your models more robust
+- credibility factor allows categories with low support to be ignored additionally making your models more robust
+- clean api
+- variety of target statistic functions in addition to allowing custom implemented ones
+
 # How?
 
 This is just a simple utility library that performs the following sample operation:
@@ -115,3 +122,21 @@ Args:
 Returns:
     the passed dataframe with encoded columns added if inplace is `False` else `None`
 ```
+
+# Custom target statistic functions
+
+You may optionally opt for a target statistic based on a statistic other than the mean although this is usually unwanted/unnecessary.
+
+Several are included and you can implement your own with a few considerations.
+### Given:
+- mean (`target_statistic_encoding.stat_funcs.mean()`)
+- median (`target_statistic_encoding.stat_funcs.median()`)
+- std (`target_statistic_encoding.stat_funcs.std()`)
+- var (`target_statistic_encoding.stat_funcs.var()`)
+- quantile (`target_statistic_encoding.stat_funcs.quantile(quantile=0.5)`)
+
+### Implement your own:
+
+You may optionally implement your own target statistic function. It must be a return a closure which operates on the `pandas.core.groupby.DataFrameGroupby` type i.e. the result of a `pandas.DataFrame.groupby` e.g.: something akin to
+
+<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>target</th>    </tr>    <tr>      <th>X1</th>      <th></th>    </tr>  </thead>  <tbody>    <tr>      <th>a</th>      <td>0.287356</td>    </tr>    <tr>      <th>b</th>      <td>0.298795</td>    </tr>    <tr>      <th>c</th>      <td>0.336879</td>    </tr>    <tr>      <th>d</th>      <td>0.287037</td>    </tr>  </tbody></table>
