@@ -31,7 +31,12 @@ Even within this simple technique there is variation in implementations. Some im
 - credibility factor allows categories with low support to be ignored additionally making your models more robust
 - clean api
 - variety of target statistic functions in addition to allowing custom implemented ones
-- easy productionalization - everything is 100% serializable
+- easy productionalization - everything is 100% serializable with pickle
+    ex. 
+    ```python
+    #Ready for test time
+    pd.to_pickle(cat2num, "cat2num_for_production.pkl")
+    ```
 
 # How?
 
