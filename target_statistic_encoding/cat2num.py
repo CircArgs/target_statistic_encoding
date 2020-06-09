@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
-from typing import List, Union
+from typing import List, Union, Callable
 import warnings
+from .stat_funcs import stat_funcs
 
 
 class Cat2Num:
@@ -27,12 +28,18 @@ class Cat2Num:
 	
     """
 
-    def __init__(self, cat_vars: List[str], target_var: str):
+    def __init__(
+        self,
+        cat_vars: List[str],
+        target_var: str,
+        stat_func: stat_funcs._StatFunc = stat_funcs.mean(),
+    ):
         """
         Args:
             cat_vars (List[str]): a list of strings representing the categorical features to be encoded
             target_var (str): string of the name of the target feature in `data`
-
+            stat_func (optional Function(*args, **kwargs) -> Function({pd.Series, pd.DataFrameGroupBy}) -> {float, pd.Series})): function which returns a closure to aggregate statistics over target - default stat_funcs.mean()
+        
         Returns:
             Cat2Num object
         """
@@ -41,8 +48,11 @@ class Cat2Num:
         ), "You must supply some categorical variables. `cat_vars` was empty."
         self.cat_vars = cat_vars
         self.target_var = target_var
+        self.stat_func = stat_func
         self.__maps = {}
+        self.__fit_transform = False
         self.__fit = False
+        self.__cred_per = None
 
     def __assign_split(self, d, n):
         tgt = d[[self.target_var]].sort_values(self.target_var)
@@ -53,25 +63,28 @@ class Cat2Num:
 
     def __get_split_mean(self, d, v, cred):
         temp = d[[v, self.target_var, "__CAT2NUM_SPLIT_TEMP_VAR__"]]
+        # check if credibility is a percentage or frequency
         cred_per = self.__check_credibility(cred)
+        # get counts of levels
         n_levels = temp[v].value_counts(dropna=False, normalize=cred_per)
-        mean_levels = n_levels[n_levels < cred].index
-
+        # get levels that have too low credibility and wil be given the mean
+        mean_levels = [v + "__CSTV__" for v in n_levels[n_levels < cred].index.tolist()]
+        # design the data
         temp[v + "__CAT2NUM_SPLIT_TEMP_VAR__"] = (
             temp[v].astype(str)
             + "__CSTV__"
             + temp["__CAT2NUM_SPLIT_TEMP_VAR__"].astype(str)
         )
         temp = temp.drop([v, "__CAT2NUM_SPLIT_TEMP_VAR__"], axis=1)
-
-        maps = temp.groupby(v + "__CAT2NUM_SPLIT_TEMP_VAR__").mean()
-        map_mean = float(maps.mean())
-
-        for i in mean_levels:
-            maps[i] = map_mean
-        maps["__CAT2NUM_Default_level__"] = map_mean
-
-        return maps[self.target_var]
+        # get target statistics by level
+        maps = self.stat_func(temp.groupby(v + "__CAT2NUM_SPLIT_TEMP_VAR__"))
+        # get mean value for uncredible cats and replace uncreds with mean
+        if mean_levels:
+            map_mean = float(maps.mean())
+            maps = maps[self.target_var]
+            for v in mean_levels:
+                maps.loc[maps.index.str.contains(v)] = map_mean
+        return maps
 
     def __agg_split_mean(self, m):
         m = m.reset_index()
@@ -96,16 +109,16 @@ class Cat2Num:
             raise ValueError(f"`split` {v} not found in data.")
 
     def __check_credibility(self, credibility):
-        cred_per = None
-        if type(credibility) == int and credibility >= 0:
-            cred_per = True
-        elif type(credibility) == float and credibility >= 0 and credibility <= 1:
-            cred_per = False
-        else:
-            raise ValueError(
-                "`credibility` must be nonnegative int or a float in [0,1]."
-            )
-        return cred_per
+        if self.__cred_per is None:
+            if type(credibility) == int and credibility >= 0:
+                self.__cred_per = False
+            elif type(credibility) == float and credibility >= 0 and credibility <= 1:
+                self.__cred_per = True
+            else:
+                raise ValueError(
+                    "`credibility` must be nonnegative int or a float in [0,1]."
+                )
+        return self.__cred_per
 
     def __str__(self):
         return f"""{'Fit' if self.__fit and self.__maps else 'Unfit'}: Cat2Num(cat_vars = {self.cat_vars}, target_var = {self.target_var})"""
@@ -124,14 +137,14 @@ class Cat2Num:
             credibility (float or int): 
                 - if float must be in [0, 1] as % of fitting data considered credible to fit statistic to
                 - if int must be >=0 as number of records in fitting data level must exist within to be credible
-                - levels not above this threshold will be given the overall target mean
+                - levels not above this threshold will be given the overall mean of the target statistic
                 
         Returns:
             fit Cat2Num instance
         """
-        if not self.__fit:
+        if not self.__fit_transform:
             warnings.warn(
-                """\nYou have yet to `fit_transform`. \nYou are not utilizing the n-split feature and so you may see greater bias as a result of target leakage.\n"""
+                """\nYou have yet to run `fit_transform`. \nYou are not utilizing the n-split feature and so you may see greater bias as a result of target leakage.\n"""
             )
 
         self.__check_cats(data)
@@ -164,7 +177,9 @@ class Cat2Num:
         Returns:
             the passed dataframe with encoded columns added if inplace is `False` else `None`
         """
-        assert self.__fit and self.__maps, "You must run fit or fit_transform first."
+        assert (
+            self.__fit or self.__fit_transform
+        ) and self.__maps, "You must run fit or fit_transform first."
 
         self.__check_cats(data)
 
@@ -200,7 +215,7 @@ class Cat2Num:
             credibility (float or int): 
                 - if float must be in [0, 1] as % of fitting data considered credible to fit statistic to
                 - if int must be >=0 as number of records in fitting data level must exist within to be credible
-                - levels not above this threshold will be given the overall target mean
+                - levels not above this threshold will be given the overall mean of the target statistic
             drop (bool): drop the original columns
             suffix (str): a string to append to the end of an encoded column, default `'_Cat2Num'`
             inplace (bool): whether the transformation should be done inplace or return the transformed data, default `False`
@@ -240,7 +255,7 @@ class Cat2Num:
             if drop:
                 temp.drop(self.cat_vars, axis=1, inplace=True)
             temp.drop("__CAT2NUM_SPLIT_TEMP_VAR__", axis=1, inplace=True)
-            self.__fit = True
+            self.__fit_transform = True
 
             if inplace:
                 for v in self.cat_vars:
