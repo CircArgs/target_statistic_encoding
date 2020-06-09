@@ -4,7 +4,7 @@
 echo "Installing poetry"
 pip3 install poetry;
 echo "Poetry install"
-pipenv install
+poetry install
 echo "Running pytest"
 poetry run python -m pytest --cov=.
 # poetry run python -m pytest --cov=. >> $GITHUB_WORKSPACE/coverage_summary
