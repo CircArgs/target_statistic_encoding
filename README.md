@@ -12,7 +12,22 @@
 </div>
 
 ---
-
+# [Table of contents:](#table-of-contents)
+- [Install](#install)
+    + [from pypi](#from-pypi)
+    + [from source](#from-source)
+- [What?](#what)
+- [Why?](#why)
+- [Benefits of this implementation](#benefits-of-this-implementation)
+- [How?](#how)
+- [API](#api)
+  * [Instantiate](#instantiate)
+  * [fit](#fit)
+    + [prefer`.fit_transform` on your training set](#prefer-fit-transform--on-your-training-set)
+    + [use `.transform` on your **non-training** set](#use--transform--on-your---non-training---set)
+- [Custom target statistic functions](#custom-target-statistic-functions)
+    + [Given:](#given)
+    + [Implement your own:](#implement-your-own)
 # Install
 
 ### from pypi
