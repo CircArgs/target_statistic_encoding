@@ -1,9 +1,11 @@
 # target statistic encoding
 
 <div align="center">
+  <a href="https://badge.fury.io/py/target-statistic-encoding"><img src="https://badge.fury.io/py/target-statistic-encoding.svg" alt="PyPI version" height="18"></a>
 <a href="https://codecov.io/gh/CircArgs/target_statistic_encoding">
   <img src="https://codecov.io/gh/CircArgs/target_statistic_encoding/branch/master/graph/badge.svg" />
 </a>
+ 
 <img alt="Build Status" src="https://github.com/CircArgs/target_statistic_encoding/workflows/test/badge.svg">
 <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg">
 <img alt="Language Python" src="https://img.shields.io/badge/language-Python-blue">
