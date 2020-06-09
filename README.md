@@ -34,8 +34,13 @@ Even within this simple technique there is variation in implementations. Some im
 - easy productionalization - everything is 100% serializable with pickle
     ex. 
     ```python
-    #Ready for test time
+    #save for prod/test time environment
     pd.to_pickle(cat2num, "cat2num_for_production.pkl")
+    
+    #read into prod env
+    cat2num=pd.read_pickle("cat2num_for_production.pkl")
+    ...
+    model.predict(cat2num.transform(prod_data))
     ```
 
 # How?
