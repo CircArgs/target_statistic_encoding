@@ -96,7 +96,7 @@ Returns:
     fit Cat2Num instance
 ```
 
-### use `transform` on your __non-training__ set
+### use `.transform` on your __non-training__ set
 
 ```python
 cat2num.transform(
