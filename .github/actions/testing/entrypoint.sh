@@ -2,7 +2,7 @@
 
 
 echo "Installing poetry"
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
 source $HOME/.poetry/env
 echo "Poetry install"
 poetry install
