@@ -1,5 +1,6 @@
 import pytest
 import pandas as pd
+import numpy as np
 import os
 from target_statistic_encoding import Cat2Num, stat_funcs
 
@@ -36,10 +37,10 @@ def test_stat_funcs(stat_func):
     train = cat2num.fit_transform(train, n_splits=n_splits, credibility=credibility)
     test = cat2num.transform(test)
     test_data_gt = pd.read_csv(data_dir("test_data_test_{}.csv".format(func_name)))
-    train_data_gt = pd.read_csv(data_dir("test_data_test_{}.csv".format(func_name)))
-    assert (test_data_gt.values == test.values).all(), "Test data did not match for {}".format(
-        func_name
-    )
-    # assert (
-    #     (train_data_gt.values == train.values).all()
-    # ), "Train data did not match for {}".format(func_name)
+    train_data_gt = pd.read_csv(data_dir("test_data_train_{}.csv".format(func_name)))
+    assert np.isclose(
+        test_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, test[["X1_Cat2Num", "X2_Cat2Num"]].values
+    ).all(), "Test data did not match for {}".format(func_name)
+    assert np.isclose(
+        train_data_gt[["X1_Cat2Num", "X2_Cat2Num"]].values, train[["X1_Cat2Num", "X2_Cat2Num"]].values
+    ).all(), "Train data did not match for {}".format(func_name)
