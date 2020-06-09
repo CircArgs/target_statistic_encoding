@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-source $HOME/.poetry/env
+
 echo "Installing poetry"
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+source $HOME/.poetry/env
 echo "Poetry install"
 poetry install
 echo "Running pytest"
