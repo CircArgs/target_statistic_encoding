@@ -26,16 +26,24 @@ Even within this simple technique there is variation in implementations. Some im
 
 This is just a simple utility library that performs the following sample operation:
 [See this example notebook](examples/example.ipynb)
+
+_keep in mind this is simply an example. The example target is random here so no real signal is expected_
 ![example usage](assets/example.png)
 
 # API
 
 ## Instantiate
 ```python
-Init signature: Cat2Num(cat_vars: List[str], target_var: str)
+Init signature:
+Cat2Num(
+    cat_vars: List[str],
+    target_var: str,
+    stat_func: target_statistic_encoding.stat_funcs.stat_funcs._StatFunc = <function mean.<locals>.stat_func at 0x7fea58a85950>,
+)
 Args:
     cat_vars (List[str]): a list of strings representing the categorical features to be encoded
     target_var (str): string of the name of the target feature in `data`
+    stat_func (optional Function(*args, **kwargs) -> Function({pd.Series, pd.DataFrameGroupBy}) -> {float, pd.Series})): function which returns a closure to aggregate statistics over target - default stat_funcs.mean()
 ```
 
 ## fit
