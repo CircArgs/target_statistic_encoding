@@ -4,6 +4,8 @@ version = "0.1.1"
 description = "A lightweight library for encoding categorical features in your dataset with robust k-fold target statistics in training."
 authors = ["CircArgs <quebecname@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage="https://github.com/CircArgs/target_statistic_encoding"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
