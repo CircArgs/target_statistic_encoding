@@ -24,7 +24,7 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='target_statistic_encoding',
-    version='0.1.1',
+    version='0.1.3',
     description='A lightweight library for encoding categorical features in your dataset with robust k-fold target statistics in training.',
     python_requires='==3.*,>=3.6.1',
     project_urls={"homepage": "https://github.com/CircArgs/target_statistic_encoding"},

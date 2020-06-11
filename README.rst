@@ -44,12 +44,14 @@ target statistic encoding
 
   * `Given: <#given>`_
   * `Implement your own: <#implement-your-own>`_
-    # Install
+
+Install
+=======
 
 from pypi
 ^^^^^^^^^
 
-``pip install target_statistic_encoding``
+``pip install target-statistic-encoding``
 
 from source
 ^^^^^^^^^^^
@@ -76,17 +78,17 @@ Benefits of this implementation
 * variety of target statistic functions in addition to allowing custom implemented ones
 * 
   easy productionalization - everything is 100% serializable with pickle
-    ex. 
+  ex.
 
   .. code-block:: python
 
-       #save for prod/test time environment
-       pd.to_pickle(cat2num, "cat2num_for_production.pkl")
+     #save for prod/test time environment
+     pd.to_pickle(cat2num, "cat2num_for_production.pkl")
 
-       #read into prod env
-       cat2num=pd.read_pickle("cat2num_for_production.pkl")
-       ...
-       model.predict(cat2num.transform(prod_data))
+     #read into prod env
+     cat2num=pd.read_pickle("cat2num_for_production.pkl")
+     ...
+     model.predict(cat2num.transform(prod_data))
 
 How?
 ====

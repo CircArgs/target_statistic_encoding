@@ -12,27 +12,30 @@
 </div>
 
 ---
+
 # [Table of contents:](#table-of-contents)
+
 - [Install](#install)
-    + [from pypi](#from-pypi)
-    + [from source](#from-source)
+  - [from pypi](#from-pypi)
+  - [from source](#from-source)
 - [What?](#what)
 - [Why?](#why)
 - [Benefits of this implementation](#benefits-of-this-implementation)
 - [How?](#how)
 - [API](#api)
-  * [Instantiate](#instantiate)
-  * [fit](#fit)
-    + [prefer`.fit_transform` on your training set](#prefer-fit-transform--on-your-training-set)
-    + [use `.transform` on your **non-training** set](#use--transform--on-your---non-training---set)
+  - [Instantiate](#instantiate)
+  - [fit](#fit)
+    - [prefer`.fit_transform` on your training set](#prefer-fit-transform--on-your-training-set)
+    - [use `.transform` on your **non-training** set](#use--transform--on-your---non-training---set)
 - [Custom target statistic functions](#custom-target-statistic-functions)
-    + [Given:](#given)
-    + [Implement your own:](#implement-your-own)
+  - [Given:](#given)
+  - [Implement your own:](#implement-your-own)
+
 # Install
 
 ### from pypi
 
-`pip install target_statistic_encoding`
+`pip install target-statistic-encoding`
 
 ### from source
 
@@ -53,16 +56,16 @@ Even within this simple technique there is variation in implementations. Some im
 - clean api
 - variety of target statistic functions in addition to allowing custom implemented ones
 - easy productionalization - everything is 100% serializable with pickle
-    ex. 
-    ```python
-    #save for prod/test time environment
-    pd.to_pickle(cat2num, "cat2num_for_production.pkl")
-    
-    #read into prod env
-    cat2num=pd.read_pickle("cat2num_for_production.pkl")
-    ...
-    model.predict(cat2num.transform(prod_data))
-    ```
+  ex.
+  ```python
+  #save for prod/test time environment
+  pd.to_pickle(cat2num, "cat2num_for_production.pkl")
+
+  #read into prod env
+  cat2num=pd.read_pickle("cat2num_for_production.pkl")
+  ...
+  model.predict(cat2num.transform(prod_data))
+  ```
 
 # How?
 
