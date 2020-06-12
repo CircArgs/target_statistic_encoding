@@ -78,10 +78,11 @@ class Cat2Num:
         temp = temp.drop([v, "__CAT2NUM_SPLIT_TEMP_VAR__"], axis=1)
         # get target statistics by level
         maps = self.stat_func(temp.groupby(v + "__CAT2NUM_SPLIT_TEMP_VAR__"))
+        maps = maps[self.target_var]
         # get mean value for uncredible cats and replace uncreds with mean
         if mean_levels:
             map_mean = float(maps.mean())
-            maps = maps[self.target_var]
+            
             for v in mean_levels:
                 maps.loc[maps.index.str.contains(v)] = map_mean
         return maps

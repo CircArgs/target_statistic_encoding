@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "target_statistic_encoding"
-version = "0.1.3"
+version = "0.1.4"
 description = "A lightweight library for encoding categorical features in your dataset with robust k-fold target statistics in training."
 authors = ["CircArgs <quebecname@gmail.com>"]
 license = "MIT"
